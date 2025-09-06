@@ -67,17 +67,27 @@ function App() {
       <AddTodo addTodo={() => fetchTodos()} />
       <SearchBar search={search} setSearch={setSearch} />
       <Filters filter={filter} setFilter={setFilter} />
-      <SortControls sort={sort} setSort={setSort} order={order} setOrder={setOrder} /> {/* 🔹 new */}
+      <SortControls
+        sort={sort}
+        setSort={setSort}
+        order={order}
+        setOrder={setOrder}
+      />{" "}
+      {/* 🔹 new */}
       {loading ? (
         <p className="text-center">Loading...</p>
       ) : (
         <>
           <TodoList
             todos={todos}
+            fetchTodos={fetchTodos}
             filter={filter}
-            toggleComplete={() => fetchTodos()}
-            deleteTodo={() => fetchTodos()}
+            search={search}
+            page={page}
+            sort={sort}
+            order={order}
           />
+
           <Pagination page={page} pages={pages} setPage={setPage} />
         </>
       )}
