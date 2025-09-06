@@ -1,5 +1,5 @@
 import Todo from "../models/Todo.js";
-import asyncHandler from "../middleware/asyncHandler.js";
+import asyncHandler from "../middlewares/asyncHandler.js";
 import { successResponse } from "../utils/response.js";
 
 // GET all todos with pagination, sorting, search

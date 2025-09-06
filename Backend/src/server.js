@@ -3,15 +3,14 @@ import dotenv from "dotenv";
 import cors from "cors";
 import connectDB from "./config/db.js";
 import todoRoutes from "./routes/todoRoutes.js";
-import errorHandler from "./middleware/errorMiddleware.js";
+import errorHandler from "./middlewares/errorMiddleware.js";
 
+const app = express();
 // after routes
 app.use(errorHandler);
 
 
 dotenv.config();
-
-const app = express();
 
 // Connect to DB
 connectDB();
