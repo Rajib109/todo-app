@@ -1,30 +1,31 @@
 import { useState } from "react";
 
-function AddTodo({ todos, setTodos }) {
+function AddTodo({ addTodo }) {
   const [text, setText] = useState("");
 
-  const handleAdd = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
     if (!text.trim()) return;
-    setTodos([...todos, { id: Date.now(), text, completed: false }]);
+    addTodo(text);
     setText("");
   };
 
   return (
-    <div className="flex mb-4">
+    <form onSubmit={handleSubmit} className="flex gap-2 mb-4">
       <input
         type="text"
         value={text}
         onChange={(e) => setText(e.target.value)}
-        placeholder="Add a new task..."
-        className="flex-grow p-2 border rounded-l-lg focus:outline-none"
+        placeholder="Enter a todo..."
+        className="flex-grow p-2 border rounded"
       />
       <button
-        onClick={handleAdd}
-        className="bg-blue-500 text-white px-4 py-2 rounded-r-lg hover:bg-blue-600"
+        type="submit"
+        className="bg-blue-500 text-white px-4 py-2 rounded"
       >
         Add
       </button>
-    </div>
+    </form>
   );
 }
 
