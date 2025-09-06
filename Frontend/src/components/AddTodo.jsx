@@ -1,13 +1,20 @@
 import { useState } from "react";
+import api from "../api/axios";
 
-function AddTodo({ addTodo }) {
+function AddTodo({ fetchTodos, filter, search, page, sort, order }) {
   const [text, setText] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!text.trim()) return;
-    addTodo(text);
-    setText("");
+
+    try {
+      await api.post("/todos", { text });
+      setText(""); // clear input
+      fetchTodos(filter, search, page, sort, order); // refetch todos
+    } catch (error) {
+      console.error("Error adding todo:", error);
+    }
   };
 
   return (
@@ -16,13 +23,10 @@ function AddTodo({ addTodo }) {
         type="text"
         value={text}
         onChange={(e) => setText(e.target.value)}
-        placeholder="Enter a todo..."
-        className="flex-grow p-2 border rounded"
+        placeholder="Add a new todo"
+        className="flex-1 p-2 border rounded"
       />
-      <button
-        type="submit"
-        className="bg-blue-500 text-white px-4 py-2 rounded"
-      >
+      <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded">
         Add
       </button>
     </form>

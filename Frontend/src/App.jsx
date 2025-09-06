@@ -64,7 +64,14 @@ function App() {
   return (
     <div className="max-w-lg mx-auto p-4">
       <h1 className="text-2xl font-bold text-center mb-4">Todo App</h1>
-      <AddTodo addTodo={() => fetchTodos()} />
+      <AddTodo
+        fetchTodos={fetchTodos}
+        filter={filter}
+        search={search}
+        page={page}
+        sort={sort}
+        order={order}
+      />
       <SearchBar search={search} setSearch={setSearch} />
       <Filters filter={filter} setFilter={setFilter} />
       <SortControls
