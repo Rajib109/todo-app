@@ -2,10 +2,44 @@ import Todo from "../models/Todo.js";
 import asyncHandler from "../middleware/asyncHandler.js";
 import { successResponse } from "../utils/response.js";
 
-// GET all todos
+// GET all todos with pagination, sorting, search
 export const getTodos = asyncHandler(async (req, res) => {
-  const todos = await Todo.find();
-  return successResponse(res, todos, "Fetched todos");
+  let { page = 1, limit = 10, sort = "createdAt", order = "desc", search = "" } = req.query;
+
+  page = Math.max(1, parseInt(page));
+  limit = Math.max(1, parseInt(limit));
+  const skip = (page - 1) * limit;
+
+  // Allowed sorting fields
+  const allowedSortFields = ["text", "createdAt", "updatedAt"];
+  if (!allowedSortFields.includes(sort)) sort = "createdAt";
+
+  // Sorting order
+  const sortOrder = order === "asc" ? 1 : -1;
+
+  // Search filter (case-insensitive)
+  const filter = search
+    ? { text: { $regex: search, $options: "i" } }
+    : {};
+
+  // Get total count (for pagination UI)
+  const total = await Todo.countDocuments(filter);
+
+  // Fetch todos with filters
+  const todos = await Todo.find(filter)
+    .sort({ [sort]: sortOrder })
+    .skip(skip)
+    .limit(limit);
+
+  return successResponse(res, {
+    total,
+    page,
+    pages: Math.ceil(total / limit),
+    limit,
+    hasNextPage: page < Math.ceil(total / limit),
+    hasPrevPage: page > 1,
+    todos,
+  }, "Fetched todos with filters");
 });
 
 // POST create todo
