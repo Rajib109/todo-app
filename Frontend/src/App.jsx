@@ -4,7 +4,8 @@ import TodoList from "./components/TodoList";
 import AddTodo from "./components/AddTodo";
 import Filters from "./components/Filters";
 import SearchBar from "./components/SearchBar";
-import Pagination from "./components/Pagination"; // 🔹 new
+import Pagination from "./components/Pagination";
+import SortControls from "./components/SortControls"; // 🔹 new
 
 function App() {
   const [todos, setTodos] = useState([]);
@@ -15,14 +16,24 @@ function App() {
   // pagination states
   const [page, setPage] = useState(1);
   const [pages, setPages] = useState(1);
-  const [limit] = useState(5); // default 5 per page
+  const [limit] = useState(5);
+
+  // sorting states
+  const [sort, setSort] = useState("createdAt"); // default: newest first
+  const [order, setOrder] = useState("desc");
 
   // Fetch todos from backend
-  const fetchTodos = async (selectedFilter = filter, searchTerm = search, currentPage = page) => {
+  const fetchTodos = async (
+    selectedFilter = filter,
+    searchTerm = search,
+    currentPage = page,
+    currentSort = sort,
+    currentOrder = order
+  ) => {
     try {
       setLoading(true);
 
-      let url = `/todos?page=${currentPage}&limit=${limit}&sort=createdAt&order=desc`;
+      let url = `/todos?page=${currentPage}&limit=${limit}&sort=${currentSort}&order=${currentOrder}`;
 
       if (selectedFilter === "active") {
         url += "&completed=false";
@@ -47,15 +58,16 @@ function App() {
   };
 
   useEffect(() => {
-    fetchTodos(filter, search, page);
-  }, [filter, search, page]);
+    fetchTodos(filter, search, page, sort, order);
+  }, [filter, search, page, sort, order]); // 🔹 now also triggers on sort/order
 
   return (
     <div className="max-w-lg mx-auto p-4">
       <h1 className="text-2xl font-bold text-center mb-4">Todo App</h1>
-      <AddTodo addTodo={(text) => fetchTodos()} />
+      <AddTodo addTodo={() => fetchTodos()} />
       <SearchBar search={search} setSearch={setSearch} />
       <Filters filter={filter} setFilter={setFilter} />
+      <SortControls sort={sort} setSort={setSort} order={order} setOrder={setOrder} /> {/* 🔹 new */}
       {loading ? (
         <p className="text-center">Loading...</p>
       ) : (
@@ -63,8 +75,8 @@ function App() {
           <TodoList
             todos={todos}
             filter={filter}
-            toggleComplete={(id, completed) => fetchTodos()}
-            deleteTodo={(id) => fetchTodos()}
+            toggleComplete={() => fetchTodos()}
+            deleteTodo={() => fetchTodos()}
           />
           <Pagination page={page} pages={pages} setPage={setPage} />
         </>
