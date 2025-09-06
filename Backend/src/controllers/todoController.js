@@ -1,10 +1,11 @@
 import Todo from "../models/Todo.js";
 import asyncHandler from "../middleware/asyncHandler.js";
+import { successResponse } from "../utils/response.js";
 
 // GET all todos
 export const getTodos = asyncHandler(async (req, res) => {
   const todos = await Todo.find();
-  res.json(todos);
+  return successResponse(res, todos, "Fetched todos");
 });
 
 // POST create todo
@@ -18,14 +19,15 @@ export const createTodo = asyncHandler(async (req, res) => {
 
   const newTodo = new Todo({ text });
   const savedTodo = await newTodo.save();
-  res.status(201).json(savedTodo);
+
+  return successResponse(res, savedTodo, "Todo created", 201);
 });
 
 // PUT update todo
 export const updateTodo = asyncHandler(async (req, res) => {
   const { id } = req.params;
-
   const todo = await Todo.findById(id);
+
   if (!todo) {
     res.status(404);
     throw new Error("Todo not found");
@@ -36,21 +38,19 @@ export const updateTodo = asyncHandler(async (req, res) => {
     req.body.completed !== undefined ? req.body.completed : todo.completed;
 
   const updatedTodo = await todo.save();
-  res.json(updatedTodo);
+  return successResponse(res, updatedTodo, "Todo updated");
 });
 
 // DELETE todo
 export const deleteTodo = asyncHandler(async (req, res) => {
   const { id } = req.params;
-
   const todo = await Todo.findById(id);
+
   if (!todo) {
-    res.json({ success: true, data: todos });
     res.status(404);
     throw new Error("Todo not found");
   }
 
   await todo.deleteOne();
-  res.json({ success: true, data: todos });
-  res.status(204).end();
+  return successResponse(res, null, "Todo deleted");
 });
