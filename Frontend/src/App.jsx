@@ -10,10 +10,19 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   // Fetch todos from backend
-  const fetchTodos = async () => {
+  const fetchTodos = async (selectedFilter = "all") => {
     try {
       setLoading(true);
-      const res = await api.get("/todos?page=1&limit=10&sort=createdAt&order=desc");
+
+      let url = "/todos?page=1&limit=10&sort=createdAt&order=desc";
+
+      if (selectedFilter === "active") {
+        url += "&completed=false";
+      } else if (selectedFilter === "completed") {
+        url += "&completed=true";
+      }
+
+      const res = await api.get(url);
       setTodos(res.data.data.todos);
     } catch (error) {
       console.error("Error fetching todos:", error);
