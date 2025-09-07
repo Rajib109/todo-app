@@ -14,7 +14,7 @@ function TodoItem({ todo, setTodos }) {
   return (
     <li className="flex justify-between items-center p-2 border-b">
       <span
-        className={`flex-grow cursor-pointer ${
+        className={`grow cursor-pointer ${
           todo.completed ? "line-through text-gray-500" : ""
         }`}
         onClick={toggleComplete}
