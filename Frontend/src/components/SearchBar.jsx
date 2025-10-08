@@ -6,7 +6,7 @@ function SearchBar({ search, setSearch }) {
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         placeholder="Search todos..."
-        className="w-full p-2 border rounded"
+        className="w-full p-2 border rounded-sm"
       />
     </div>
   );

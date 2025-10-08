@@ -7,7 +7,7 @@ function SortControls({ sort, setSort, order, setOrder }) {
       <select
         value={sort}
         onChange={(e) => setSort(e.target.value)}
-        className="p-2 border rounded"
+        className="p-2 border rounded-sm"
       >
         <option value="createdAt">Date Created</option>
         <option value="text">Text</option>
@@ -17,7 +17,7 @@ function SortControls({ sort, setSort, order, setOrder }) {
       <select
         value={order}
         onChange={(e) => setOrder(e.target.value)}
-        className="p-2 border rounded"
+        className="p-2 border rounded-sm"
       >
         <option value="asc">Ascending</option>
         <option value="desc">Descending</option>

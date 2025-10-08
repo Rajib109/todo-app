@@ -14,7 +14,7 @@ function Pagination({ page, pages, setPage }) {
       <button
         onClick={handlePrev}
         disabled={page === 1}
-        className="px-3 py-1 border rounded disabled:opacity-50"
+        className="px-3 py-1 border rounded-sm disabled:opacity-50"
       >
         Prev
       </button>
@@ -26,7 +26,7 @@ function Pagination({ page, pages, setPage }) {
       <button
         onClick={handleNext}
         disabled={page === pages}
-        className="px-3 py-1 border rounded disabled:opacity-50"
+        className="px-3 py-1 border rounded-sm disabled:opacity-50"
       >
         Next
       </button>

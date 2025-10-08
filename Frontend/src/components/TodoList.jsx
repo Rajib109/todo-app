@@ -43,7 +43,7 @@ function TodoList({ todos, fetchTodos, filter, search, page, sort, order }) {
         {todos.map((todo) => (
           <li
             key={todo._id}
-            className="flex justify-between items-center p-2 border rounded"
+            className="flex justify-between items-center p-2 border rounded-sm"
           >
             <span
               onClick={() => toggleComplete(todo._id, todo.completed)}
